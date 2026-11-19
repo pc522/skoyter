@@ -15,6 +15,9 @@ h1{margin:0;font-size:24px}
 .sub{color:var(--mut);font-size:14px;margin-top:2px}
 .warn{margin:8px 16px;padding:10px 12px;border-radius:12px;background:#fff4d9;color:#5c4300;font-size:13.5px}
 @media(prefers-color-scheme:dark){.warn{background:#3a2f12;color:#f3dfa6}}
+.weeks{display:flex;gap:6px;padding:4px 16px 0;max-width:720px;margin:0 auto}
+.weeks button{flex:1;padding:8px 0;border:1px solid var(--line);background:transparent;color:var(--acc);border-radius:10px;font:600 13.5px inherit;font-family:inherit}
+.weeks button.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .days{display:flex;gap:6px;padding:8px 16px;overflow-x:auto}
 .days button{flex:1;min-width:44px;padding:9px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;font:600 14px inherit;font-family:inherit}
 .days button.on{background:var(--acc);border-color:var(--acc);color:#fff}
@@ -72,6 +75,7 @@ textarea{width:100%;height:240px;font:14px/1.5 ui-monospace,Menlo,monospace;bord
   <div class="sub">BIP · Stabæk · Øhil (Hoslebanen) · Ullern · Høvik</div>
 </header>
 <div class="warn" id="warn"></div>
+<div class="weeks" id="weeks"></div>
 <div class="days" id="days"></div>
 <div class="legend">
   <span><i class="dot" style="background:var(--pub)"></i>Publikum</span>
@@ -313,6 +317,8 @@ const text=b=>{const v=store.get(KEY+b.id);return v===null?b.def:v};
 function parse(txt){
   const out=[];
   for(const raw of txt.split('\n')){
+    const dm=raw.trim().toLowerCase().match(/^(\d{1,2})\.(\d{1,2})\.?\s+(\d{1,2}[:.]\d{2})\s*[-–]\s*(\d{1,2}[:.]\d{2})\s*(publikum|usikker|prep|skole|org|stengt)?/);
+    if(dm){const mn=s=>{const [hh,mm]=s.replace('.',':').split(':').map(Number);return hh*60+mm};out.push({date:+dm[1]+'.'+ +dm[2],d:-1,from:mn(dm[3]),to:mn(dm[4]),type:dm[5]||'publikum'});continue}
     const m=raw.trim().toLowerCase().match(/^(man|tir|ons|tor|fre|lør|søn)(?:\s*-\s*(man|tir|ons|tor|fre|lør|søn))?\s+(\d{1,2}[:.]\d{2})\s*[-–]\s*(\d{1,2}[:.]\d{2})\s*(publikum|usikker|prep|skole|org|stengt)?/);
     if(!m)continue;
     const a=DAYS.indexOf(m[1]),z=m[2]?DAYS.indexOf(m[2]):a;
@@ -327,18 +333,37 @@ const isPub=x=>x.type==='publikum'||x.type==='usikker';
 const isGood=x=>isPub(x)||x.type==='skole';
 
 const jsDay=(new Date().getDay()+6)%7;
-let sel=jsDay;
+let sel=jsDay,wk=0;
+// Ukedagslinjene i appen gjelder disse datoene (oppdateres hver mandag). Linjer som starter med dato (f.eks. «26.11 10:00-13:00 publikum») gjelder bare den datoen.
+const DATA_FROM='2026-11-19',DATA_TO='2026-11-25';
+const dateFor=i=>{const dt=new Date();dt.setHours(12,0,0,0);dt.setDate(dt.getDate()+((i-jsDay+7)%7)+wk*7);return dt};
+const iso=dt=>dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+const dkey=dt=>dt.getDate()+'.'+(dt.getMonth()+1);
+function dayData(b,i){
+  const dt=dateFor(i),all=parse(text(b)),key=dkey(dt);
+  const dated=all.filter(x=>x.date===key);
+  const custom=store.get(KEY+b.id)!==null;
+  const inWin=custom||(iso(dt)>=DATA_FROM&&iso(dt)<=DATA_TO);
+  const items=(dated.length?dated:(inWin?all.filter(x=>!x.date&&x.d===i):[])).sort((a,c)=>a.from-c.from);
+  return {items,avail:dated.length>0||inWin};
+}
+const isToday=()=>wk===0&&sel===jsDay;
 
+function renderWeek(){
+  const w=$('#weeks');w.innerHTML='';
+  [['Denne uka',0],['Neste uke',1]].forEach(([t,v])=>{const b=document.createElement('button');b.textContent=t;b.className=wk===v?'on':'';b.onclick=()=>{wk=v;render()};w.appendChild(b)});
+}
 function renderDays(){
+  renderWeek();
   const el=$('#days');el.innerHTML='';
-  DAYS.forEach((d,i)=>{
+  for(let k=0;k<7;k++){const i=(jsDay+k)%7,d=DAYS[i];
     const b=document.createElement('button');
     b.className=i===sel?'on':'';
-    const dt=new Date();dt.setDate(dt.getDate()+((i-jsDay+7)%7));
-    b.innerHTML=d[0].toUpperCase()+d.slice(1)+'<small>'+(i===jsDay?'i dag':dt.getDate()+'.'+(dt.getMonth()+1))+'</small>';
+    const dt=dateFor(i);
+    b.innerHTML=d[0].toUpperCase()+d.slice(1)+'<small>'+(wk===0&&i===jsDay?'i dag':dt.getDate()+'.'+(dt.getMonth()+1))+'</small>';
     b.onclick=()=>{sel=i;render()};
     el.appendChild(b);
-  });
+  }
 }
 
 function seg(x,S,E,who){
@@ -349,7 +374,7 @@ function seg(x,S,E,who){
 function freeBar(S,E){
   let o='';
   for(let t=S;t<E;t+=15){
-    const who=BANER.filter(b=>parse(text(b)).some(x=>x.d===sel&&isPub(x)&&x.from<t+15&&x.to>t)).map(b=>ovShort[b.id]);
+    const who=BANER.filter(b=>dayData(b,sel).items.some(x=>isPub(x)&&x.from<t+15&&x.to>t)).map(b=>ovShort[b.id]);
     if(!who.length)continue;
     const tip=hm(t)+'–'+hm(t+15)+' · Publikum: '+who.join(', ')+' ('+who.length+' av '+BANER.length+')';
     o+='<div class="seg" data-tip="'+tip+'" title="'+tip+'" style="left:'+((t-S)/(E-S)*100)+'%;width:'+(15/(E-S)*100)+'%;background:var(--pub);opacity:'+(0.3+0.7*who.length/4)+';border:0"></div>';
@@ -363,7 +388,7 @@ function render(){
   $('#warn').textContent='Appen oppdaterer seg hver mandag morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv.';
   const main=$('#main');main.innerHTML='';
   const S=6*60,E=23*60;
-  const nowLine=sel===jsDay&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
+  const nowLine=isToday()&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
   let tk='';for(let h=6;h<=23;h++){tk+='<span'+(h%3===0?' class="mj"':'')+' style="left:'+((h*60-S)/(E-S)*100)+'%">'+String(h).padStart(2,'0')+'</span>'}
   const ticks='<div class="ticks">'+tk+'</div>';
 
@@ -371,33 +396,33 @@ function render(){
     const ov=document.createElement('div');ov.className='card';
   let oh='<div class="name" style="font-size:16px">Samlet oversikt · '+FULL[sel]+'</div><div class="ovgrid"><div></div>'+ticks.replace('class="ticks"','class="ticks top"')+'<div class="ovl" style="color:var(--pub)">Ledig</div><div><div class="bar ovbar">'+freeBar(S,E)+nowLine+'</div><div class="lab ovt2">Grønt = publikumstid minst ett sted (mørkere = flere baner)</div></div>';
   BANER.forEach(b=>{
-    const its=parse(text(b)).filter(x=>x.d===sel).sort((a,c)=>a.from-c.from);
+    const dd=dayData(b,sel),its=dd.items;
     const good=its.filter(isGood);
-    const tt=good.length?good.map(x=>hm(x.from)+'–'+hm(x.to)+(x.type==='skole'?' (skøyteskole)':'')).join(', '):(its.length?'Ingen publikumstid':'Ikke oppgitt');
+    const tt=good.length?good.map(x=>hm(x.from)+'–'+hm(x.to)+(x.type==='skole'?' (skøyteskole)':'')).join(', '):(its.length?'Ingen publikumstid':(dd.avail?'Ikke oppgitt':'Ikke hentet ennå'));
     oh+='<div class="ovl">'+ovShort[b.id]+'</div><div><div class="bar ovbar">'+its.map(x=>seg(x,S,E,ovShort[b.id])).join('')+nowLine+'</div><div class="lab ovt2">'+tt+'</div></div>';
   });
   oh+='<div></div>'+ticks+'</div>';
   ov.innerHTML=oh;main.appendChild(ov);
 
   for(const b of BANER){
-    const items=parse(text(b)).filter(x=>x.d===sel).sort((a,c)=>a.from-c.from);
+    const dd=dayData(b,sel),items=dd.items;
     const pubs=items.filter(isPub);
-    let badge='<span class="badge b-off">Ingen tider</span>';
+    let badge='<span class="badge b-off">'+(dd.avail?'Ingen tider':'Ikke hentet')+'</span>';
     if(items.length){
-      const live=sel===jsDay?items.find(x=>nm>=x.from&&nm<x.to&&isPub(x)):null;
-      const cur=sel===jsDay?items.find(x=>nm>=x.from&&nm<x.to):null;
+      const live=isToday()?items.find(x=>nm>=x.from&&nm<x.to&&isPub(x)):null;
+      const cur=isToday()?items.find(x=>nm>=x.from&&nm<x.to):null;
       if(live)badge=live.type==='publikum'?'<span class="badge b-on">Åpent nå til '+hm(live.to)+'</span>':'<span class="badge b-unk">Kanskje åpent</span>';
-      else if(sel===jsDay&&cur&&cur.type!=='skole'){
+      else if(isToday()&&cur&&cur.type!=='skole'){
         badge='<span class="badge b-off">'+({prep:'Preparering nå',org:'Opptatt nå',stengt:'Stengt nå'}[cur.type]||'Ikke åpent nå')+'</span>';
       } else if(pubs.length){
-        const nxt=sel===jsDay?pubs.find(x=>x.from>nm):pubs[0];
+        const nxt=isToday()?pubs.find(x=>x.from>nm):pubs[0];
         badge=nxt?'<span class="badge b-off">'+(nxt.type==='usikker'?'Usikkert fra ':'Åpner ')+hm(nxt.from)+'</span>':'<span class="badge b-off">Ferdig for i dag</span>';
       } else badge='<span class="badge b-off">Ingen publikumstid</span>';
     }
     const li=(x,c)=>'<li'+(c?' class="sm"':'')+'><i class="dot" style="background:'+COL[x.type]+'"></i><span class="t">'+hm(x.from)+'–'+hm(x.to)+'</span><span class="lab">'+LAB[x.type]+'</span></li>';
     const good=items.filter(isGood);
     let list;
-    if(!items.length)list='<div class="empty">Ingen tider registrert for '+FULL[sel].toLowerCase()+'.</div>';
+    if(!items.length)list='<div class="empty">'+(dd.avail?'Ingen tider registrert for '+FULL[sel].toLowerCase()+'.':'Tidene for '+dkey(dateFor(sel))+' er ikke hentet ennå. De legges inn når klubben har publisert dem, og appen oppdateres hver mandag.')+'</div>';
     else{
       list=good.length?'<ul>'+good.map(x=>li(x)).join('')+'</ul>':'<div class="empty">Ingen publikumstid denne dagen.</div>';
       if(items.length>good.length)list+='<details><summary>Hele dagsprogrammet ('+items.length+' tidsrom)</summary><ul>'+items.map(x=>li(x,1)).join('')+'</ul></details>';
