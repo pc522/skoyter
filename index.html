@@ -360,7 +360,7 @@ function freeBar(S,E){
 function render(){
   renderDays();
   const now=new Date(),nm=now.getHours()*60+now.getMinutes();
-  $('#warn').textContent='Obs: Tidene er hentet fra klubbenes egne kalendere for de neste dagene og kan endre seg fra uke til uke. Se «Kilde» på hvert kort, eller legg inn tider selv.';
+  $('#warn').textContent='Appen oppdaterer seg hver mandag morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv.';
   const main=$('#main');main.innerHTML='';
   const S=6*60,E=23*60;
   const nowLine=sel===jsDay&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
