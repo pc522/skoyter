@@ -67,6 +67,12 @@ textarea{width:100%;height:240px;font:14px/1.5 ui-monospace,Menlo,monospace;bord
 .lock input{font:600 28px/1 ui-monospace,Menlo,monospace;letter-spacing:.5em;text-align:center;width:9em;padding:12px 8px 12px 20px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink)}
 .lock input.bad{border-color:var(--stengt)}
 .lock .err{color:var(--stengt);font-size:14px;min-height:1.2em}
+.sumlist{margin:10px 0 0;gap:8px}
+.sumrow{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.sn{font-weight:700;min-width:58px}
+.sv{display:flex;gap:6px 10px;flex-wrap:wrap}
+.pt{font-weight:700;font-variant-numeric:tabular-nums;color:var(--pub);background:rgba(28,156,107,.12);padding:2px 8px;border-radius:8px}
+.pt.now{background:var(--pub);color:#fff}
 </style>
 </head>
 <body>
@@ -393,6 +399,22 @@ function render(){
   const nowLine=isToday()&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
   let tk='';for(let h=6;h<=23;h++){tk+='<span'+(h%3===0?' class="mj"':'')+' style="left:'+((h*60-S)/(E-S)*100)+'%">'+String(h).padStart(2,'0')+'</span>'}
   const ticks='<div class="ticks">'+tk+'</div>';
+
+  // Publikumstider i klartekst øverst
+  {
+    const sc=document.createElement('div');sc.className='card sum';
+    let sh='<div class="name" style="font-size:16px">Publikumstid '+FULL[sel].toLowerCase()+' '+dkey(dateFor(sel))+'</div><ul class="sumlist">';
+    BANER.forEach(b=>{
+      const dd=dayData(b,sel),p=dd.items.filter(isPub);
+      let right;
+      if(!dd.avail)right='<span class="lab">Ikke hentet ennå</span>';
+      else if(!dd.items.length)right='<span class="lab">Ikke oppgitt</span>';
+      else if(!p.length)right='<span class="lab">Ingen publikumstid</span>';
+      else right=p.map(x=>{const open=isToday()&&nm>=x.from&&nm<x.to;return '<span class="pt'+(open?' now':'')+'">'+hm(x.from)+' – '+hm(x.to)+(x.type==='usikker'?' (usikkert)':'')+(open?' · åpent nå':'')+'</span>'}).join('');
+      sh+='<li class="sumrow"><span class="sn">'+ovShort[b.id]+'</span><span class="sv">'+right+'</span></li>';
+    });
+    sc.innerHTML=sh+'</ul>';main.appendChild(sc);
+  }
 
   // Samlet oversikt
     const ov=document.createElement('div');ov.className='card';
