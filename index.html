@@ -332,7 +332,7 @@ const hm=n=>String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2
 const isPub=x=>x.type==='publikum'||x.type==='usikker';
 const isGood=x=>isPub(x)||x.type==='skole';
 
-const jsDay=(new Date().getDay()+6)%7;
+let jsDay=(new Date().getDay()+6)%7;
 let sel=jsDay,wk=0;
 // Ukedagslinjene i appen gjelder disse datoene (oppdateres hver mandag). Linjer som starter med dato (f.eks. «26.11 10:00-13:00 publikum») gjelder bare den datoen.
 const DATA_FROM='2026-11-19',DATA_TO='2026-11-25';
@@ -383,6 +383,8 @@ function freeBar(S,E){
 }
 
 function render(){
+  const nd=(new Date().getDay()+6)%7;
+  if(nd!==jsDay){jsDay=nd;sel=nd;wk=0}
   renderDays();
   const now=new Date(),nm=now.getHours()*60+now.getMinutes();
   $('#warn').textContent='Appen oppdaterer seg hver mandag morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv.';
@@ -461,6 +463,7 @@ const PIN='2026';
   });
 })();
 render();setInterval(render,60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 </script>
 </body>
 </html>
