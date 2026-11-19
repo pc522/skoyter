@@ -10,8 +10,11 @@
 @media(prefers-color-scheme:dark){:root{--bg:#0e1a22;--card:#16252f;--ink:#e6f0f5;--mut:#8fa6b3;--line:#27404f;--org:#8aa2b4;--acc:#5bb6e8}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-header{padding:20px 16px 8px}
-h1{margin:0;font-size:24px}
+header{padding:20px 16px 8px;position:relative}
+#clock{position:absolute;top:18px;right:16px;text-align:right;font-variant-numeric:tabular-nums;line-height:1.1}
+#clock b{display:block;font-size:26px}
+#clock span{font-size:11.5px;color:var(--mut)}
+h1{margin:0;font-size:22px;max-width:calc(100% - 90px)}
 .sub{color:var(--mut);font-size:14px;margin-top:2px}
 .warn{margin:8px 16px;padding:10px 12px;border-radius:12px;background:#fff4d9;color:#5c4300;font-size:13.5px}
 @media(prefers-color-scheme:dark){.warn{background:#3a2f12;color:#f3dfa6}}
@@ -67,6 +70,7 @@ textarea{width:100%;height:240px;font:14px/1.5 ui-monospace,Menlo,monospace;bord
 </head>
 <body>
 <header>
+  <div id="clock"><b></b><span></span></div>
   <h1>⛸️ Publikumstider på isen</h1>
   <div class="sub">BIP · Stabæk · Øhil (Hoslebanen) · Ullern · Høvik</div>
 </header>
@@ -434,6 +438,8 @@ const PIN='2026';
     else{I.classList.add('bad');document.getElementById('pinerr').textContent='Feil kode';I.value=''}
   });
 })();
+function tick(){const n=new Date();document.querySelector('#clock b').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.querySelector('#clock span').textContent=FULL[(n.getDay()+6)%7]+' '+n.getDate()+'.'+(n.getMonth()+1)}
+tick();setInterval(tick,1000);
 render();setInterval(render,60000);
 </script>
 </body>
