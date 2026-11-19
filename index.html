@@ -10,11 +10,11 @@
 @media(prefers-color-scheme:dark){:root{--bg:#0e1a22;--card:#16252f;--ink:#e6f0f5;--mut:#8fa6b3;--line:#27404f;--org:#8aa2b4;--acc:#5bb6e8}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-header{padding:20px 16px 8px;position:relative}
-#clock{position:absolute;top:18px;right:16px;text-align:right;font-variant-numeric:tabular-nums;line-height:1.1}
-#clock b{display:block;font-size:26px}
-#clock span{font-size:11.5px;color:var(--mut)}
-h1{margin:0;font-size:22px;max-width:calc(100% - 90px)}
+header{padding:20px 16px 8px}
+#clock{display:flex;justify-content:center;align-items:baseline;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+#clock b{font-size:30px;line-height:1}
+#clock span{font-size:13px;color:var(--mut)}
+h1{margin:0;font-size:24px}
 .sub{color:var(--mut);font-size:14px;margin-top:2px}
 .warn{margin:8px 16px;padding:10px 12px;border-radius:12px;background:#fff4d9;color:#5c4300;font-size:13.5px}
 @media(prefers-color-scheme:dark){.warn{background:#3a2f12;color:#f3dfa6}}
@@ -34,9 +34,9 @@ main{padding:4px 16px 28px;display:grid;gap:12px;max-width:720px;margin:auto}
 .bar::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(to right,transparent 0,transparent calc(100%/17 - 1px),var(--card) calc(100%/17 - 1px),var(--card) calc(100%/17))}
 .seg{position:absolute;top:0;bottom:0;border-right:1px solid var(--card)}
 .now{position:absolute;top:-2px;bottom:-2px;width:2px;background:#e5484d;z-index:2}
-.ticks{position:relative;height:14px;color:var(--mut);font-size:9.5px;font-variant-numeric:tabular-nums}
+.ticks{position:relative;height:16px;color:var(--mut);font-size:11px;font-variant-numeric:tabular-nums}
 .ticks span{position:absolute;top:0;transform:translateX(-50%)}
-.ticks span.mj{color:var(--ink);font-weight:700;font-size:10.5px}
+.ticks span.mj{color:var(--ink);font-weight:700;font-size:11.5px}
 ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
 li{display:flex;gap:8px;align-items:baseline;font-size:15px}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;transform:translateY(1px)}
@@ -70,7 +70,6 @@ textarea{width:100%;height:240px;font:14px/1.5 ui-monospace,Menlo,monospace;bord
 </head>
 <body>
 <header>
-  <div id="clock"><b></b><span></span></div>
   <h1>⛸️ Publikumstider på isen</h1>
   <div class="sub">BIP · Stabæk · Øhil (Hoslebanen) · Ullern · Høvik</div>
 </header>
@@ -367,7 +366,7 @@ function render(){
   const main=$('#main');main.innerHTML='';
   const S=6*60,E=23*60;
   const nowLine=sel===jsDay&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
-  let tk='';for(let h=6;h<=23;h++){tk+='<span'+(h%3===0?' class="mj"':'')+' style="left:'+((h*60-S)/(E-S)*100)+'%">'+String(h).padStart(2,'0')+'</span>'}
+  let tk='';for(let h=6;h<=22;h+=2){tk+='<span class="mj" style="left:'+((h*60-S)/(E-S)*100)+'%">'+String(h).padStart(2,'0')+'</span>'}
   const ticks='<div class="ticks">'+tk+'</div>';
 
   // Samlet oversikt
@@ -379,7 +378,7 @@ function render(){
     const tt=good.length?good.map(x=>hm(x.from)+'–'+hm(x.to)+(x.type==='skole'?' (skøyteskole)':'')).join(', '):(its.length?'Ingen publikumstid':'Ikke oppgitt');
     oh+='<div class="ovl">'+ovShort[b.id]+'</div><div><div class="bar ovbar">'+its.map(x=>seg(x,S,E,ovShort[b.id])).join('')+nowLine+'</div><div class="lab ovt2">'+tt+'</div></div>';
   });
-  oh+='<div></div>'+ticks+'</div>';
+  oh+='<div></div>'+ticks+'</div><div id="clock"><b></b><span></span></div>';
   ov.innerHTML=oh;main.appendChild(ov);
 
   for(const b of BANER){
@@ -412,6 +411,7 @@ function render(){
       +'<div class="row">'+b.src.map(s=>'<a class="btn" target="_blank" rel="noopener" href="'+s[1]+'">Kilde: '+s[0]+'</a>').join('')+'<button class="btn" data-id="'+b.id+'">Rediger tider</button></div>';
     main.appendChild(c);
   }
+  tick();
   main.querySelectorAll('button[data-id]').forEach(btn=>btn.onclick=()=>openEd(btn.dataset.id));
 }
 
@@ -438,7 +438,7 @@ const PIN='2026';
     else{I.classList.add('bad');document.getElementById('pinerr').textContent='Feil kode';I.value=''}
   });
 })();
-function tick(){const n=new Date();document.querySelector('#clock b').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.querySelector('#clock span').textContent=FULL[(n.getDay()+6)%7]+' '+n.getDate()+'.'+(n.getMonth()+1)}
+function tick(){const c=document.querySelector('#clock b');if(!c)return;const n=new Date();document.querySelector('#clock b').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.querySelector('#clock span').textContent=FULL[(n.getDay()+6)%7]+' '+n.getDate()+'.'+(n.getMonth()+1)}
 tick();setInterval(tick,1000);
 render();setInterval(render,60000);
 </script>
