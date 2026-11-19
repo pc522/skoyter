@@ -11,9 +11,6 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
 header{padding:20px 16px 8px}
-#clock{display:flex;justify-content:center;align-items:baseline;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
-#clock b{font-size:30px;line-height:1}
-#clock span{font-size:13px;color:var(--mut)}
 h1{margin:0;font-size:24px}
 .sub{color:var(--mut);font-size:14px;margin-top:2px}
 .warn{margin:8px 16px;padding:10px 12px;border-radius:12px;background:#fff4d9;color:#5c4300;font-size:13.5px}
@@ -34,9 +31,10 @@ main{padding:4px 16px 28px;display:grid;gap:12px;max-width:720px;margin:auto}
 .bar::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(to right,transparent 0,transparent calc(100%/17 - 1px),var(--card) calc(100%/17 - 1px),var(--card) calc(100%/17))}
 .seg{position:absolute;top:0;bottom:0;border-right:1px solid var(--card)}
 .now{position:absolute;top:-2px;bottom:-2px;width:2px;background:#e5484d;z-index:2}
-.ticks{position:relative;height:16px;color:var(--mut);font-size:11px;font-variant-numeric:tabular-nums}
+.ticks{position:relative;height:16px;color:var(--mut);font-size:10px;font-variant-numeric:tabular-nums}
 .ticks span{position:absolute;top:0;transform:translateX(-50%)}
-.ticks span.mj{color:var(--ink);font-weight:700;font-size:11.5px}
+.ticks span.mj{color:var(--ink);font-weight:700;font-size:11px}
+.ticks.top{margin-bottom:4px}
 ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
 li{display:flex;gap:8px;align-items:baseline;font-size:15px}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;transform:translateY(1px)}
@@ -366,19 +364,19 @@ function render(){
   const main=$('#main');main.innerHTML='';
   const S=6*60,E=23*60;
   const nowLine=sel===jsDay&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
-  let tk='';for(let h=6;h<=22;h+=2){tk+='<span class="mj" style="left:'+((h*60-S)/(E-S)*100)+'%">'+String(h).padStart(2,'0')+'</span>'}
+  let tk='';for(let h=6;h<=23;h++){tk+='<span'+(h%3===0?' class="mj"':'')+' style="left:'+((h*60-S)/(E-S)*100)+'%">'+String(h).padStart(2,'0')+'</span>'}
   const ticks='<div class="ticks">'+tk+'</div>';
 
   // Samlet oversikt
     const ov=document.createElement('div');ov.className='card';
-  let oh='<div class="name" style="font-size:16px">Samlet oversikt · '+FULL[sel]+'</div><div class="ovgrid"><div class="ovl" style="color:var(--pub)">Ledig</div><div><div class="bar ovbar">'+freeBar(S,E)+nowLine+'</div><div class="lab ovt2">Grønt = publikumstid minst ett sted (mørkere = flere baner)</div></div>';
+  let oh='<div class="name" style="font-size:16px">Samlet oversikt · '+FULL[sel]+'</div><div class="ovgrid"><div></div>'+ticks.replace('class="ticks"','class="ticks top"')+'<div class="ovl" style="color:var(--pub)">Ledig</div><div><div class="bar ovbar">'+freeBar(S,E)+nowLine+'</div><div class="lab ovt2">Grønt = publikumstid minst ett sted (mørkere = flere baner)</div></div>';
   BANER.forEach(b=>{
     const its=parse(text(b)).filter(x=>x.d===sel).sort((a,c)=>a.from-c.from);
     const good=its.filter(isGood);
     const tt=good.length?good.map(x=>hm(x.from)+'–'+hm(x.to)+(x.type==='skole'?' (skøyteskole)':'')).join(', '):(its.length?'Ingen publikumstid':'Ikke oppgitt');
     oh+='<div class="ovl">'+ovShort[b.id]+'</div><div><div class="bar ovbar">'+its.map(x=>seg(x,S,E,ovShort[b.id])).join('')+nowLine+'</div><div class="lab ovt2">'+tt+'</div></div>';
   });
-  oh+='<div></div>'+ticks+'</div><div id="clock"><b></b><span></span></div>';
+  oh+='<div></div>'+ticks+'</div>';
   ov.innerHTML=oh;main.appendChild(ov);
 
   for(const b of BANER){
@@ -411,7 +409,6 @@ function render(){
       +'<div class="row">'+b.src.map(s=>'<a class="btn" target="_blank" rel="noopener" href="'+s[1]+'">Kilde: '+s[0]+'</a>').join('')+'<button class="btn" data-id="'+b.id+'">Rediger tider</button></div>';
     main.appendChild(c);
   }
-  tick();
   main.querySelectorAll('button[data-id]').forEach(btn=>btn.onclick=()=>openEd(btn.dataset.id));
 }
 
@@ -438,8 +435,6 @@ const PIN='2026';
     else{I.classList.add('bad');document.getElementById('pinerr').textContent='Feil kode';I.value=''}
   });
 })();
-function tick(){const c=document.querySelector('#clock b');if(!c)return;const n=new Date();document.querySelector('#clock b').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.querySelector('#clock span').textContent=FULL[(n.getDay()+6)%7]+' '+n.getDate()+'.'+(n.getMonth()+1)}
-tick();setInterval(tick,1000);
 render();setInterval(render,60000);
 </script>
 </body>
