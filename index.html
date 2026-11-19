@@ -353,6 +353,7 @@ function dayData(b,i){
   const items=(dated.length?dated:(inWin?all.filter(x=>!x.date&&x.d===i):[])).sort((a,c)=>a.from-c.from);
   return {items,avail:dated.length>0||inWin};
 }
+const left=m=>{const hh=Math.floor(m/60),mm=m%60;return (hh?hh+' t ':'')+(mm||!hh?mm+' min':'')};
 const isToday=()=>wk===0&&sel===jsDay;
 
 function renderWeek(){
@@ -410,7 +411,7 @@ function render(){
       if(!dd.avail)right='<span class="lab">Ikke hentet ennå</span>';
       else if(!dd.items.length)right='<span class="lab">Ikke oppgitt</span>';
       else if(!p.length)right='<span class="lab">Ingen publikumstid</span>';
-      else right=p.map(x=>{const open=isToday()&&nm>=x.from&&nm<x.to;return '<span class="pt'+(open?' now':'')+'">'+hm(x.from)+' – '+hm(x.to)+(x.type==='usikker'?' (usikkert)':'')+(open?' · åpent nå':'')+'</span>'}).join('');
+      else right=p.map(x=>{const open=isToday()&&nm>=x.from&&nm<x.to;return '<span class="pt'+(open?' now':'')+'">'+hm(x.from)+' – '+hm(x.to)+(x.type==='usikker'?' (usikkert)':'')+(open?' · åpent nå, '+left(x.to-nm)+' igjen':'')+'</span>'}).join('');
       sh+='<li class="sumrow"><span class="sn">'+ovShort[b.id]+'</span><span class="sv">'+right+'</span></li>';
     });
     sc.innerHTML=sh+'</ul>';main.appendChild(sc);
@@ -435,7 +436,7 @@ function render(){
     if(items.length){
       const live=isToday()?items.find(x=>nm>=x.from&&nm<x.to&&isPub(x)):null;
       const cur=isToday()?items.find(x=>nm>=x.from&&nm<x.to):null;
-      if(live)badge=live.type==='publikum'?'<span class="badge b-on">Åpent nå til '+hm(live.to)+'</span>':'<span class="badge b-unk">Kanskje åpent</span>';
+      if(live)badge=live.type==='publikum'?'<span class="badge b-on">Åpent nå til '+hm(live.to)+' · '+left(live.to-nm)+' igjen</span>':'<span class="badge b-unk">Kanskje åpent</span>';
       else if(isToday()&&cur&&cur.type!=='skole'){
         badge='<span class="badge b-off">'+({prep:'Preparering nå',org:'Opptatt nå',stengt:'Stengt nå'}[cur.type]||'Ikke åpent nå')+'</span>';
       } else if(pubs.length){
