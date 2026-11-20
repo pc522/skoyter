@@ -394,7 +394,7 @@ function render(){
   if(nd!==jsDay){jsDay=nd;sel=nd;wk=0}
   renderDays();
   const now=new Date(),nm=now.getHours()*60+now.getMinutes();
-  $('#warn').textContent='Appen oppdaterer seg hver mandag morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv.';
+  $('#warn').textContent='Appen oppdaterer seg hver morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv.';
   const main=$('#main');main.innerHTML='';
   const S=6*60,E=23*60;
   const nowLine=isToday()&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
@@ -447,7 +447,7 @@ function render(){
     const li=(x,c)=>'<li'+(c?' class="sm"':'')+'><i class="dot" style="background:'+COL[x.type]+'"></i><span class="t">'+hm(x.from)+'–'+hm(x.to)+'</span><span class="lab">'+LAB[x.type]+'</span></li>';
     const good=items.filter(isGood);
     let list;
-    if(!items.length)list='<div class="empty">'+(dd.avail?'Ingen tider registrert for '+FULL[sel].toLowerCase()+'.':'Tidene for '+dkey(dateFor(sel))+' er ikke hentet ennå. De legges inn når klubben har publisert dem, og appen oppdateres hver mandag.')+'</div>';
+    if(!items.length)list='<div class="empty">'+(dd.avail?'Ingen tider registrert for '+FULL[sel].toLowerCase()+'.':'Tidene for '+dkey(dateFor(sel))+' er ikke hentet ennå. De legges inn når klubben har publisert dem, og appen oppdateres hver morgen.')+'</div>';
     else{
       list=good.length?'<ul>'+good.map(x=>li(x)).join('')+'</ul>':'<div class="empty">Ingen publikumstid denne dagen.</div>';
       if(items.length>good.length)list+='<details><summary>Hele dagsprogrammet ('+items.length+' tidsrom)</summary><ul>'+items.map(x=>li(x,1)).join('')+'</ul></details>';
