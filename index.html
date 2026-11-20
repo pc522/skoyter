@@ -72,7 +72,7 @@ textarea{width:100%;height:240px;font:14px/1.5 ui-monospace,Menlo,monospace;bord
 .sn{font-weight:700;min-width:58px}
 .sv{display:flex;gap:6px 10px;flex-wrap:wrap}
 .pt{font-weight:700;font-variant-numeric:tabular-nums;color:var(--pub);background:rgba(28,156,107,.12);padding:2px 8px;border-radius:8px}
-.pt.now{background:var(--pub);color:#fff}
+.pt.pon{background:var(--pub);color:#fff}
 </style>
 </head>
 <body>
@@ -411,7 +411,7 @@ function render(){
       if(!dd.avail)right='<span class="lab">Ikke hentet ennå</span>';
       else if(!dd.items.length)right='<span class="lab">Ikke oppgitt</span>';
       else if(!p.length)right='<span class="lab">Ingen publikumstid</span>';
-      else right=p.map(x=>{const open=isToday()&&nm>=x.from&&nm<x.to;return '<span class="pt'+(open?' now':'')+'">'+hm(x.from)+' – '+hm(x.to)+(x.type==='usikker'?' (usikkert)':'')+(open?' · åpent nå, '+left(x.to-nm)+' igjen':'')+'</span>'}).join('');
+      else right=p.map(x=>{const open=isToday()&&nm>=x.from&&nm<x.to;return '<span class="pt'+(open?' pon':'')+'">'+hm(x.from)+' – '+hm(x.to)+(x.type==='usikker'?' (usikkert)':'')+(open?' · åpent nå, '+left(x.to-nm)+' igjen':'')+'</span>'}).join('');
       sh+='<li class="sumrow"><span class="sn">'+ovShort[b.id]+'</span><span class="sv">'+right+'</span></li>';
     });
     sc.innerHTML=sh+'</ul>';main.appendChild(sc);
