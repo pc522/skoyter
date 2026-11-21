@@ -123,7 +123,7 @@ const LAB={publikum:'Publikum',usikker:'Usikkert – sjekk kalender',prep:'Prepa
 const BANER=[
  {id:'bip',name:'BIP kunstis',loc:'Bærum idrettspark, Rud',
   src:[['Bærum idrettspark på Facebook','https://www.facebook.com/p/B%C3%A6rum-Idrettspark-100038804157127/']],
-  note:'Uke 47 (16.–22. nov), fra BIPs Facebook-innlegg 17. nov. BIP oppgir bare publikumstidene. Resten av tiden er isen vanligvis opptatt av bandy/hockey/kunstløp, men det står ikke hvilke tider. Iskjøring (isen jevnes) er lørdag kl. 11, 15 og 18, søndag kl. 11 og fredag kl. 18. Man–ons neste uke er antatt lik uke 47.',
+  note:'Uke 47 (16.–22. nov.), fra BIPs Facebook-innlegg 17. nov. Uke 48 var ikke publisert 21. nov. Lør 21. og søn 22. nov. er fra uke 47. Man–fre 23.–27. nov. er antatt lik uke 47 (14:00–16:30, fredag også 19:00–22:30). Tider fra 28. nov. er ikke hentet ennå. BIP oppgir bare publikumstidene. Resten av tiden er isen vanligvis opptatt av bandy/hockey/kunstløp, men det står ikke hvilke tider. Iskjøring (isen jevnes) er lørdag kl. 11, 15 og 18, søndag kl. 11 og fredag kl. 18.',
   def:`man-fre 14:00-16:30 publikum
 fre 19:00-22:30 publikum
 lør 09:30-20:00 publikum
@@ -131,31 +131,8 @@ søn 09:30-15:30 publikum
 søn 20:30-22:00 publikum`},
  {id:'stabaek',name:'Stabæk – Stabekkbanen (Plassen)',loc:'Ringstabekk',
   src:[['Stabæk IF – skøyteskole','https://www.stabaekif.no/sk%C3%B8yteskole'],['EasyPlay-kalender','https://www.easyplay.no/clubs/StabaekIF?stadiums=Bandy_Plassen']],
-  note:'Fra Stabæks bookingkalender (EasyPlay): tor–søn er 19.–22. nov., man–ons er 23.–25. nov. Mandag og onsdag neste uke er banen booket av skole, så ingen publikumstid. Fra torsdag 26. nov. er ikke lest.',
-  def:`tor 08:00-11:00 prep
-tor 11:00-13:00 publikum
-tor 13:00-14:30 org
-tor 14:30-15:00 prep
-tor 15:00-16:00 org
-tor 16:00-17:00 prep
-tor 17:00-19:00 org
-tor 19:00-19:30 prep
-tor 19:30-20:30 org
-tor 20:30-21:00 prep
-tor 21:00-23:00 org
-fre 08:00-10:00 prep
-fre 10:00-12:00 org
-fre 12:00-13:00 publikum
-fre 13:00-14:30 prep
-fre 14:30-16:30 org
-fre 16:30-17:00 prep
-fre 17:00-18:30 org
-fre 18:30-19:00 prep
-fre 19:00-20:00 org
-fre 20:00-20:30 prep
-fre 20:30-22:00 org
-fre 22:00-23:00 prep
-lør 08:00-09:30 prep
+  note:'Fra Stabæks bookingkalender (EasyPlay): 21.–27. nov. og 28. nov.–4. des. Fra 5. des. er ikke lest. Publikumstid er stort sett kl. 11–13 (21., 24., 26. nov. og 29. nov.–4. des.). Ingen publikumstid 22., 23., 25., 27. og 28. nov. (skole, trening eller kamper). Lørdag 28. nov. er banen opptatt av kamper det meste av dagen.',
+  def:`lør 08:00-09:30 prep
 lør 09:30-11:00 org
 lør 11:00-13:00 publikum
 lør 13:00-14:00 prep
@@ -207,42 +184,126 @@ ons 18:30-19:00 prep
 ons 19:00-20:30 org
 ons 20:30-21:00 prep
 ons 21:00-22:00 org
-ons 22:00-23:00 prep`},
+ons 22:00-23:00 prep
+tor 08:00-11:00 prep
+tor 11:00-13:00 publikum
+tor 13:00-14:30 org
+tor 14:30-15:00 prep
+tor 15:00-16:00 org
+tor 16:00-17:00 prep
+tor 17:00-19:00 org
+tor 19:00-19:30 prep
+tor 19:30-20:30 org
+tor 20:30-21:00 prep
+fre 08:00-09:00 prep
+fre 09:00-13:00 org
+fre 13:00-14:30 prep
+fre 14:30-16:30 org
+fre 16:30-17:00 prep
+fre 17:00-18:30 org
+fre 18:30-19:00 prep
+fre 19:00-20:00 org
+fre 20:00-20:30 prep
+fre 22:05-23:00 prep
+28.11 08:00-09:30 prep
+28.11 09:30-11:00 org
+28.11 11:00-11:30 prep
+28.11 11:30-14:00 org
+28.11 14:00-14:30 prep
+28.11 14:30-16:30 org
+28.11 17:00-23:00 prep
+29.11 08:00-10:00 prep
+29.11 10:00-11:00 skole
+29.11 11:00-13:00 publikum
+29.11 13:00-13:30 prep
+29.11 13:30-14:30 org
+29.11 14:30-15:00 prep
+29.11 15:00-16:00 org
+29.11 16:00-18:00 prep
+29.11 18:00-20:00 org
+29.11 20:00-21:00 prep
+29.11 21:00-22:00 org
+29.11 22:00-23:00 prep
+30.11 08:00-11:00 prep
+30.11 11:00-13:00 publikum
+30.11 13:00-14:00 prep
+30.11 15:00-16:00 prep
+30.11 16:00-18:00 org
+30.11 18:00-18:30 prep
+30.11 18:30-20:00 org
+30.11 20:00-20:30 prep
+30.11 20:30-22:00 org
+30.11 22:00-23:00 prep
+1.12 08:00-11:00 prep
+1.12 11:00-13:00 publikum
+1.12 13:00-15:00 prep
+1.12 15:00-16:00 org
+1.12 16:00-17:00 prep
+1.12 17:00-18:00 org
+1.12 18:00-18:30 prep
+1.12 18:30-20:00 org
+1.12 20:00-20:30 prep
+1.12 20:30-22:30 org
+1.12 22:30-23:00 prep
+2.12 08:00-11:00 prep
+2.12 11:00-13:00 publikum
+2.12 13:00-15:00 prep
+2.12 15:00-16:00 org
+2.12 16:00-16:30 prep
+2.12 16:30-17:30 org
+2.12 17:30-19:00 prep
+2.12 19:00-22:00 org
+2.12 22:00-23:00 prep
+3.12 08:00-11:00 prep
+3.12 11:00-13:00 publikum
+3.12 13:00-15:00 prep
+3.12 15:00-16:00 org
+3.12 16:00-17:00 prep
+3.12 17:00-19:00 org
+3.12 19:00-19:30 prep
+3.12 19:30-20:30 org
+3.12 20:30-21:00 prep
+3.12 21:00-23:00 org
+4.12 08:00-11:00 prep
+4.12 11:00-13:00 publikum
+4.12 13:00-14:30 prep
+4.12 14:30-16:30 org
+4.12 16:30-17:00 prep
+4.12 17:00-18:30 org
+4.12 18:30-19:00 prep
+4.12 19:00-20:00 org
+4.12 20:00-20:30 prep
+4.12 22:05-23:00 prep`},
  {id:'ohil',name:'Øhil – Hoslebanen',loc:'Hosle, Bærum',
   src:[['ØHIL Bandy kalender (EasyPlay)','https://www.easyplay.no/clubs/ohilbandy?stadium=Hosle_idrettsanlegg&stadiums=Hoslebanen_kunstis']],
-  note:'Fra ØHILs bookingkalender: tor–søn er 19.–22. nov., man–ons er 23.–25. nov. På hverdager bruker Hosle skole halve banen kl. 10–13 og 14–16, og publikum har da den andre halvdelen. Fra 21. des. er det lengre åpningstider i juleferien.',
-  def:`tor 07:00-10:00 prep
-tor 10:00-13:00 publikum
-tor 13:00-14:00 prep
-tor 14:00-16:00 publikum
-tor 16:00-16:45 prep
-tor 16:45-18:00 skole
-tor 18:00-18:30 prep
-tor 18:30-20:15 org
-tor 20:15-21:00 prep
-tor 21:00-22:15 org
-fre 07:00-10:00 prep
-fre 10:00-13:00 publikum
-fre 13:00-14:00 prep
-fre 14:00-16:00 publikum
-fre 16:00-16:45 prep
-fre 16:45-19:15 org
-fre 19:15-22:15 publikum
+  note:'Fra ØHILs bookingkalender (EasyPlay): 21.–27. nov. og 28. nov.–4. des. På hverdager bruker Hosle skole halve banen, og publikum har den andre halvdelen. Lørdag 21. nov. er det jentecup, så publikum først kl. 18:30. Fra 11. des. er det cup (ikke lagt inn).',
+  def:`lør 07:00-07:30 stengt
 lør 07:30-09:00 prep
-lør 09:00-16:00 org
+lør 09:00-11:30 org
+lør 11:30-12:00 prep
+lør 12:00-14:30 org
+lør 14:30-15:00 prep
+lør 15:00-16:00 org
 lør 16:00-17:00 prep
-lør 17:00-18:30 org
+lør 17:00-17:30 org
+lør 17:30-17:45 prep
+lør 17:45-18:30 org
 lør 18:30-20:00 publikum
+lør 20:00-23:00 stengt
+søn 07:00-08:00 stengt
 søn 08:00-09:30 prep
 søn 09:30-11:00 skole
 søn 11:00-15:00 publikum
 søn 15:00-16:00 prep
-søn 16:00-17:15 org
+søn 16:00-16:30 org
+søn 16:30-16:45 prep
+søn 16:45-17:15 org
 søn 17:15-17:45 prep
 søn 17:45-19:00 org
 søn 19:00-20:00 publikum
 søn 20:00-20:30 prep
 søn 20:30-21:45 org
+søn 21:45-23:00 stengt
 man 07:00-10:00 prep
 man 10:00-13:00 publikum
 man 13:00-14:00 prep
@@ -254,6 +315,7 @@ man 19:00-19:30 prep
 man 19:30-20:45 org
 man 20:45-21:15 prep
 man 21:15-22:30 org
+man 22:30-23:00 stengt
 tir 07:00-10:00 prep
 tir 10:00-13:00 publikum
 tir 13:00-14:00 prep
@@ -264,7 +326,10 @@ tir 16:45-17:45 org
 tir 17:45-18:15 prep
 tir 18:15-19:15 org
 tir 19:30-20:00 prep
-tir 20:00-21:45 org
+tir 20:00-20:45 org
+tir 20:45-21:00 prep
+tir 21:00-21:45 org
+tir 22:30-23:00 stengt
 ons 07:00-10:00 prep
 ons 10:00-13:00 publikum
 ons 13:00-14:00 prep
@@ -275,27 +340,120 @@ ons 17:00-18:30 org
 ons 18:45-19:15 prep
 ons 19:15-20:30 org
 ons 20:30-21:00 prep
-ons 21:00-22:45 org`},
+ons 21:00-21:45 org
+ons 21:45-22:00 prep
+ons 22:00-22:30 org
+ons 22:30-23:00 stengt
+tor 07:00-10:00 prep
+tor 10:00-13:00 publikum
+tor 13:00-14:00 prep
+tor 14:00-16:00 publikum
+tor 16:00-16:45 prep
+tor 16:45-18:00 skole
+tor 18:00-19:00 org
+tor 19:00-19:30 prep
+tor 19:30-20:30 org
+tor 20:30-21:00 prep
+tor 21:00-22:15 org
+tor 22:30-23:00 stengt
+fre 07:00-10:00 prep
+fre 10:00-13:00 publikum
+fre 13:00-14:00 prep
+fre 14:00-16:00 publikum
+fre 16:00-16:45 prep
+fre 16:45-18:00 org
+fre 18:00-19:00 prep
+fre 19:00-19:40 org
+fre 19:40-19:55 prep
+fre 19:55-20:35 org
+fre 20:35-22:15 publikum
+fre 22:15-23:00 stengt
+28.11 07:00-08:00 stengt
+28.11 08:00-09:30 prep
+28.11 09:30-10:45 org
+28.11 10:45-16:00 publikum
+28.11 16:00-17:00 prep
+28.11 17:00-20:00 publikum
+28.11 20:00-23:00 stengt
+29.11 07:00-08:00 stengt
+29.11 08:00-09:30 prep
+29.11 09:30-11:00 skole
+29.11 11:00-17:00 publikum
+29.11 17:00-17:30 prep
+29.11 17:30-19:55 org
+29.11 19:55-20:25 prep
+29.11 20:30-21:45 org
+29.11 21:45-23:00 stengt
+30.11 07:00-10:00 prep
+30.11 10:00-11:30 publikum
+30.11 11:30-13:00 org
+30.11 13:00-14:00 prep
+30.11 14:00-14:45 publikum
+30.11 14:45-16:00 org
+30.11 16:00-16:45 prep
+30.11 16:45-19:15 org
+30.11 19:15-20:00 prep
+30.11 20:00-20:40 org
+30.11 20:40-20:55 prep
+30.11 20:55-21:35 org
+30.11 22:30-23:00 stengt
+1.12 07:00-10:00 prep
+1.12 10:00-11:30 publikum
+1.12 11:30-13:00 org
+1.12 13:00-14:00 prep
+1.12 14:00-14:30 publikum
+1.12 14:30-16:00 org
+1.12 16:00-16:45 prep
+1.12 16:45-19:00 org
+1.12 19:15-20:00 prep
+1.12 20:00-20:45 org
+1.12 20:45-21:00 prep
+1.12 21:15-22:30 org
+1.12 22:30-23:00 stengt
+2.12 07:00-10:00 prep
+2.12 10:00-11:30 publikum
+2.12 11:30-13:00 org
+2.12 13:00-14:00 prep
+2.12 14:00-14:45 publikum
+2.12 14:45-16:00 org
+2.12 16:00-16:45 prep
+2.12 16:45-18:00 org
+2.12 18:00-18:30 prep
+2.12 18:30-19:45 org
+2.12 19:45-20:15 prep
+2.12 20:15-21:30 org
+2.12 22:30-23:00 stengt
+3.12 07:00-10:00 prep
+3.12 10:00-11:30 publikum
+3.12 11:30-13:00 org
+3.12 13:00-14:00 prep
+3.12 14:00-16:00 publikum
+3.12 16:00-16:45 prep
+3.12 16:45-19:50 org
+3.12 20:00-20:30 prep
+3.12 20:30-21:15 org
+3.12 21:15-21:30 prep
+3.12 21:30-22:15 org
+3.12 22:30-23:00 stengt
+4.12 07:00-10:00 prep
+4.12 10:00-11:30 publikum
+4.12 11:30-13:00 org
+4.12 13:00-14:00 prep
+4.12 14:00-16:00 publikum
+4.12 16:00-16:45 prep
+4.12 16:45-19:15 org
+4.12 19:15-22:15 publikum
+4.12 22:15-23:00 stengt`},
  {id:'ullern',name:'Ullern kunstis',loc:'Ullern idrettspark, Myntfunnveien 3',
   src:[['Ullern Bandy kalender','https://bandy.ullern.no/profile/calendar?uid=1102829918']],
-  note:'Fra Ullern Bandys kalender: tor–søn er 19.–22. nov., man–ons er 23.–25. nov. Tirsdag 24. nov. er banen stengt for isvård til kl. 15. Ukene etter ser ut til å følge samme mønster.',
-  def:`tor 09:00-10:30 prep
-tor 10:30-14:30 publikum
-tor 14:30-15:00 prep
-tor 15:00-16:30 org
-tor 20:00-20:30 prep
-tor 20:30-22:00 org
-fre 09:00-10:30 prep
-fre 10:30-16:00 publikum
-fre 19:00-20:30 stengt
+  note:'Fra Ullern Bandys kalender: 21.–30. nov. 1.–4. des. er ikke publisert ennå. Tirsdag 24. nov. er banen stengt for isvård til kl. 15. Torsdag 26. nov. er publikumstiden satt til 10:30–16:00, men etterskolebandy bruker banen fra 15:00. Mandag 30. nov. bruker AKS Bjørnsletta banen 14:30–16:00. Banen stenger kl. 19 fredag 27. og lørdag 28. nov.',
+  def:`lør 09:00-10:00 prep
 lør 10:00-14:00 publikum
-lør 16:00-17:30 prep
+lør 15:00-20:30 stengt
 søn 09:00-10:00 prep
 søn 10:00-14:00 publikum
-søn 16:00-17:30 prep
 søn 19:30-20:00 prep
 søn 20:00-21:30 org
-man 09:00-10:30 prep
 man 10:30-16:00 publikum
 man 16:00-17:00 prep
 man 17:00-22:00 org
@@ -305,13 +463,46 @@ tir 16:30-17:30 prep
 tir 17:30-22:00 org
 ons 09:00-10:30 prep
 ons 10:30-16:00 publikum
-ons 16:30-17:30 prep
+ons 16:00-17:00 prep
+ons 17:00-19:00 org
 ons 19:00-20:00 prep
-ons 20:00-22:00 org`}
+ons 20:00-22:00 org
+tor 09:00-10:30 prep
+tor 10:30-14:30 publikum
+tor 14:30-15:00 prep
+tor 15:00-16:30 org
+tor 16:30-17:30 prep
+tor 17:30-22:00 org
+fre 09:00-10:30 prep
+fre 10:30-16:00 publikum
+fre 16:00-17:00 prep
+fre 17:00-18:30 org
+fre 19:00-22:00 stengt
+28.11 08:30-10:00 prep
+28.11 10:00-14:00 publikum
+28.11 14:30-16:00 prep
+28.11 16:00-18:00 org
+28.11 19:00-22:00 stengt
+29.11 08:30-10:00 prep
+29.11 10:00-14:00 publikum
+29.11 18:30-20:00 prep
+29.11 20:00-21:30 org
+30.11 10:30-14:30 publikum
+30.11 14:30-16:00 org
+30.11 16:00-17:00 prep
+30.11 17:00-19:30 org
+30.11 19:30-20:00 prep
+30.11 20:00-22:00 org`}
  ,{id:'hovik',name:'Høvik – Høvikbanen',loc:'Høvik idrettspark, Glassverkveien 116',
   src:[['Høvik IF kalender (EasyPlay)','https://www.easyplay.no/clubs/Hovikif/view-only?stadium=H%C3%B8vik_kunstis&stadiums=H%C3%B8vik_kunstis&view=list'],['Høvik IF','https://www.hovikif.no/']],
-  note:'Høvik IF har ikke lagt inn tider i bookingkalenderen (EasyPlay) ennå, og det kommer trolig snart. Mye av tiden er trolig organisert bandy. Tidene dukker opp når kalenderen er fylt ut, eller du kan legge inn selv med «Rediger tider».',
-  def:``}
+  note:'Høvik IF har lagt ut tider i EasyPlay fra 1. des. (ingen tider 21.–30. nov.). 1.–3. des. er det bare organisert bandy kl. 17–22, ingen publikumstid. Fredag 4. des. kl. 17–18 står «Åpen trening» (usikkert om den er åpen for publikum). Publikum er satt opp lørdag 5. des. kl. 11–20 og søndag 6. des. kl. 11–19 (utenfor perioden som vises nå).',
+  def:`1.12 17:00-22:00 org
+2.12 17:00-20:00 org
+2.12 20:00-20:30 prep
+2.12 20:30-21:30 org
+3.12 17:30-20:00 org
+3.12 20:30-22:00 org
+4.12 17:00-18:00 usikker`}
 ];
 
 const $=s=>document.querySelector(s);
@@ -341,7 +532,7 @@ const isGood=x=>isPub(x)||x.type==='skole';
 let jsDay=(new Date().getDay()+6)%7;
 let sel=jsDay,wk=0;
 // Ukedagslinjene i appen gjelder disse datoene (oppdateres hver mandag). Linjer som starter med dato (f.eks. «26.11 10:00-13:00 publikum») gjelder bare den datoen.
-const DATA_FROM='2026-11-19',DATA_TO='2026-11-25';
+const DATA_FROM='2026-11-21',DATA_TO='2026-11-27';
 const dateFor=i=>{const dt=new Date();dt.setHours(12,0,0,0);dt.setDate(dt.getDate()+((i-jsDay+7)%7)+wk*7);return dt};
 const iso=dt=>dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
 const dkey=dt=>dt.getDate()+'.'+(dt.getMonth()+1);
