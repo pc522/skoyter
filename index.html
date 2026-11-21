@@ -580,12 +580,17 @@ function freeBar(S,E){
   return o;
 }
 
+// Når tidene sist ble hentet. MAC_OPPDATERT (BIP og Ullern) settes av Mac mini-oppgaven sammen med DATA_FROM.
+const MAC_OPPDATERT='2026-11-21T07:21:00+01:00';
+let EP_OPPDATERT=null;
+const nbTid=x=>{const d=new Date(x);return isNaN(d)?'':d.toLocaleString('nb-NO',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}).replace(',',' kl.')};
+const upd=()=>'Sist oppdatert: Stabæk, Øhil og Høvik '+(EP_OPPDATERT?nbTid(EP_OPPDATERT):'ikke hentet (reservetider)')+' · BIP og Ullern '+nbTid(MAC_OPPDATERT)+'.';
 function render(){
   const nd=(new Date().getDay()+6)%7;
   if(nd!==jsDay){jsDay=nd;sel=nd;wk=0}
   renderDays();
   const now=new Date(),nm=now.getHours()*60+now.getMinutes();
-  $('#warn').textContent='Appen oppdaterer seg hver morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv.';
+  $('#warn').textContent='Appen oppdaterer seg hver morgen. Tidene er hentet fra klubbenes egne kalendere og kan endre seg underveis. Se «Kilde» på hvert kort, eller legg inn tider selv. '+upd();
   const main=$('#main');main.innerHTML='';
   const S=6*60,E=23*60;
   const nowLine=isToday()&&nm>=S&&nm<=E?'<div class="now" style="left:'+((nm-S)/(E-S)*100)+'%"></div>':'';
@@ -685,7 +690,7 @@ async function lastEasyPlay(){
     const j=await r.json();
     if(!j.baner||!j.fra||!j.til||j.til<iso(new Date()))return;
     const dm=x=>+x.slice(8)+'.'+ +x.slice(5,7)+'.';
-    let n=0;
+    let n=0;EP_OPPDATERT=j.hentet||null;
     for(const b of BANER){
       const x=j.baner[b.id];if(!x)continue;
       b.def=x.linjer.join('\n');b.avFrom=j.fra;b.avTo=j.til;
