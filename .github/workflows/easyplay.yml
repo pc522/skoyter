@@ -1,0 +1,22 @@
+name: Hent EasyPlay-tider
+on:
+  schedule:
+    - cron: '10 4 * * *'   # ca. 05:10/06:10 norsk tid
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  hent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/hent-easyplay.mjs
+      - name: Commit hvis endret
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/easyplay-tider.json
+          git diff --cached --quiet || (git commit -m "EasyPlay-tider" && git push)
