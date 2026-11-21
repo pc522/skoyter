@@ -540,7 +540,7 @@ function dayData(b,i){
   const dt=dateFor(i),all=parse(text(b)),key=dkey(dt);
   const dated=all.filter(x=>x.date===key);
   const custom=store.get(KEY+b.id)!==null;
-  const inWin=custom||(iso(dt)>=DATA_FROM&&iso(dt)<=DATA_TO);
+  const inWin=custom||(iso(dt)>=DATA_FROM&&iso(dt)<=DATA_TO)||(b.avFrom&&iso(dt)>=b.avFrom&&iso(dt)<=b.avTo);
   const items=(dated.length?dated:(inWin?all.filter(x=>!x.date&&x.d===i):[])).sort((a,c)=>a.from-c.from);
   return {items,avail:dated.length>0||inWin};
 }
@@ -676,7 +676,26 @@ const PIN='2026';
     else{I.classList.add('bad');document.getElementById('pinerr').textContent='Feil kode';I.value=''}
   });
 })();
-render();setInterval(render,60000);
+// Stabæk, Øhil og Høvik hentes av en GitHub-jobb fra EasyPlay hver morgen. Ullern og BIP kommer fra Mac mini-oppgaven (innebygd over).
+// Mislykkes henting, eller er filen utdatert, brukes de innebygde tidene.
+async function lastEasyPlay(){
+  try{
+    const r=await fetch('https://pc522.github.io/skoyter/data/easyplay-tider.json?t='+(Date.now()/3e5|0),{cache:'no-store'});
+    if(!r.ok)return;
+    const j=await r.json();
+    if(!j.baner||!j.fra||!j.til||j.til<iso(new Date()))return;
+    const dm=x=>+x.slice(8)+'.'+ +x.slice(5,7)+'.';
+    let n=0;
+    for(const b of BANER){
+      const x=j.baner[b.id];if(!x)continue;
+      b.def=x.linjer.join('\n');b.avFrom=j.fra;b.avTo=j.til;
+      b.note='Fra klubbens bookingkalender (EasyPlay), hentet automatisk hver morgen. Gjelder '+dm(j.fra)+'–'+dm(j.til)+(x.linjer.length?'':' Ingen tider er lagt ut ennå.')+(b.id==='ohil'?' «Hosle skole» på halv bane er ikke tatt med.':'');
+      n++;
+    }
+    if(n)render();
+  }catch(e){}
+}
+render();lastEasyPlay();setInterval(render,60000);setInterval(lastEasyPlay,3600000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 </script>
 </body>
