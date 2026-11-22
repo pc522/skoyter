@@ -123,7 +123,7 @@ const LAB={publikum:'Publikum',usikker:'Usikkert – sjekk kalender',prep:'Prepa
 const BANER=[
  {id:'bip',name:'BIP kunstis',loc:'Bærum idrettspark, Rud',
   src:[['Bærum idrettspark på Facebook','https://www.facebook.com/p/B%C3%A6rum-Idrettspark-100038804157127/']],
-  note:'Uke 47 (16.–22. nov.), fra BIPs Facebook-innlegg 17. nov. Uke 48 var ikke publisert 21. nov. Lør 21. og søn 22. nov. er fra uke 47. Man–fre 23.–27. nov. er antatt lik uke 47 (14:00–16:30, fredag også 19:00–22:30). Tider fra 28. nov. er ikke hentet ennå. BIP oppgir bare publikumstidene. Resten av tiden er isen vanligvis opptatt av bandy/hockey/kunstløp, men det står ikke hvilke tider. Iskjøring (isen jevnes) er lørdag kl. 11, 15 og 18, søndag kl. 11 og fredag kl. 18.',
+  note:'Tidene ble ikke oppdatert 22. nov.: BIPs Facebook-side kunne ikke leses uten innlogging, og siste innlegg uke 48 ble ikke funnet. Tidene under er fra uke 47 (16.–22. nov., BIPs innlegg 17. nov.) og kan være utdaterte. Sjekk BIPs Facebook-side. BIP oppgir bare publikumstidene. Iskjøring (isen jevnes) er lørdag kl. 11, 15 og 18, søndag kl. 11 og fredag kl. 18.',
   def:`man-fre 14:00-16:30 publikum
 fre 19:00-22:30 publikum
 lør 09:30-20:00 publikum
@@ -446,11 +446,8 @@ fre 22:15-23:00 stengt
 4.12 22:15-23:00 stengt`},
  {id:'ullern',name:'Ullern kunstis',loc:'Ullern idrettspark, Myntfunnveien 3',
   src:[['Ullern Bandy kalender','https://bandy.ullern.no/profile/calendar?uid=1102829918']],
-  note:'Fra Ullern Bandys kalender: 21.–30. nov. 1.–4. des. er ikke publisert ennå. Tirsdag 24. nov. er banen stengt for isvård til kl. 15. Torsdag 26. nov. er publikumstiden satt til 10:30–16:00, men etterskolebandy bruker banen fra 15:00. Mandag 30. nov. bruker AKS Bjørnsletta banen 14:30–16:00. Banen stenger kl. 19 fredag 27. og lørdag 28. nov.',
-  def:`lør 09:00-10:00 prep
-lør 10:00-14:00 publikum
-lør 15:00-20:30 stengt
-søn 09:00-10:00 prep
+  note:'Fra Ullern Bandys kalender: gjelder 22.–30. nov. 1.–5. des. er ikke publisert ennå. Tirsdag 24. nov. er banen stengt for isvård til kl. 15. Torsdag 26. nov. er publikumstiden satt til 10:30–16:00, men etterskolebandy bruker banen fra 15:00. Mandag 30. nov. bruker AKS Bjørnsletta banen 14:30–16:00. Banen stenger kl. 19 fredag 27. og lørdag 28. nov.',
+  def:`søn 09:00-10:00 prep
 søn 10:00-14:00 publikum
 søn 19:30-20:00 prep
 søn 20:00-21:30 org
@@ -478,11 +475,11 @@ fre 10:30-16:00 publikum
 fre 16:00-17:00 prep
 fre 17:00-18:30 org
 fre 19:00-22:00 stengt
-28.11 08:30-10:00 prep
-28.11 10:00-14:00 publikum
-28.11 14:30-16:00 prep
-28.11 16:00-18:00 org
-28.11 19:00-22:00 stengt
+lør 08:30-10:00 prep
+lør 10:00-14:00 publikum
+lør 14:30-16:00 prep
+lør 16:00-18:00 org
+lør 19:00-22:00 stengt
 29.11 08:30-10:00 prep
 29.11 10:00-14:00 publikum
 29.11 18:30-20:00 prep
@@ -532,7 +529,7 @@ const isGood=x=>isPub(x)||x.type==='skole';
 let jsDay=(new Date().getDay()+6)%7;
 let sel=jsDay,wk=0;
 // Ukedagslinjene i appen gjelder disse datoene (oppdateres hver mandag). Linjer som starter med dato (f.eks. «26.11 10:00-13:00 publikum») gjelder bare den datoen.
-const DATA_FROM='2026-11-21',DATA_TO='2026-11-27';
+const DATA_FROM='2026-11-22',DATA_TO='2026-11-28';
 const dateFor=i=>{const dt=new Date();dt.setHours(12,0,0,0);dt.setDate(dt.getDate()+((i-jsDay+7)%7)+wk*7);return dt};
 const iso=dt=>dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
 const dkey=dt=>dt.getDate()+'.'+(dt.getMonth()+1);
@@ -581,7 +578,7 @@ function freeBar(S,E){
 }
 
 // Når tidene sist ble hentet. MAC_OPPDATERT (BIP og Ullern) settes av Mac mini-oppgaven sammen med DATA_FROM.
-const MAC_OPPDATERT='2026-11-21T07:21:00+01:00';
+const MAC_OPPDATERT='2026-11-22T07:30:00+01:00';
 let EP_OPPDATERT=null;
 const nbTid=x=>{const d=new Date(x);return isNaN(d)?'':d.toLocaleString('nb-NO',{day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'}).replace(',',' kl.')};
 const upd=()=>'Sist oppdatert: Stabæk, Øhil og Høvik '+(EP_OPPDATERT?nbTid(EP_OPPDATERT):'ikke hentet (reservetider)')+' · BIP og Ullern '+nbTid(MAC_OPPDATERT)+'.';
